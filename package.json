@@ -1,0 +1,25 @@
+{
+  "name": "opencode-openai-proxy",
+  "version": "0.1.0",
+  "description": "OpenAI-compatible proxy for OpenCode OAuth credentials",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "test": "bun test",
+    "test:agent": "bun run tests/agent-loop.ts"
+  },
+  "dependencies": {
+    "hono": "^4.7.0",
+    "opencode-auth-provider": "^0.1.0",
+    "ai": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.7.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
