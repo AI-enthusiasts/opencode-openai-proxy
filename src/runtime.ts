@@ -1,4 +1,3 @@
-// @ts-expect-error - opencode-auth-provider has no type declarations
 import { OpencodeAI } from "@tarquinen/opencode-auth-provider"
 
 type OpencodeAIInstance = {

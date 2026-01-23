@@ -8,7 +8,6 @@ import {
 } from "@ai-sdk/provider"
 import {
   InvalidArgumentError,
-  InvalidToolArgumentsError,
   NoSuchProviderError,
   NoSuchToolError,
   RetryError,
@@ -58,8 +57,7 @@ export function mapToOpenAIError(error: unknown): MappedError {
   if (
     InvalidArgumentError.isInstance(error) ||
     InvalidPromptError.isInstance(error) ||
-    NoSuchToolError.isInstance(error) ||
-    InvalidToolArgumentsError.isInstance(error)
+    NoSuchToolError.isInstance(error)
   ) {
     return {
       status: 400,
