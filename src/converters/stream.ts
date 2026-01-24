@@ -43,7 +43,7 @@ export function convertStreamPart(
   switch (part.type) {
     case "text-delta": {
       const chunk = createChunk(state, {
-        content: part.textDelta as string,
+        content: part.text as string,
         // First chunk must include role
         ...(state.sentRole ? {} : { role: "assistant" }),
       })
@@ -117,7 +117,7 @@ export function convertStreamPart(
           {
             index,
             function: {
-              arguments: part.argsTextDelta as string,
+              arguments: part.inputTextDelta as string,
             },
           },
         ],
