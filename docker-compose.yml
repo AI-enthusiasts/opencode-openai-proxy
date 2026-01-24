@@ -4,7 +4,7 @@ services:
     ports:
       - "${PORT:-8080}:8080"
     volumes:
-      - ${OPENCODE_DATA_DIR:-~/.local/share/opencode}:/data/opencode:ro
+      - ${OPENCODE_DATA_DIR:-~/.local/share/opencode}:/data/opencode
     environment:
       - OPENCODE_DATA_DIR=/data/opencode
       - PORT=8080

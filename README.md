@@ -80,7 +80,7 @@ OPENCODE_DATA_DIR=/path/to/opencode docker compose up -d
 
 ```bash
 docker build -t opencode-openai-proxy .
-docker run -p 8080:8080 -v ~/.local/share/opencode:/data/opencode:ro -e OPENCODE_DATA_DIR=/data/opencode opencode-openai-proxy
+docker run -p 8080:8080 -v ~/.local/share/opencode:/data/opencode -e OPENCODE_DATA_DIR=/data/opencode opencode-openai-proxy
 ```
 
 ## API
