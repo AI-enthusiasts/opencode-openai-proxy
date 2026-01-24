@@ -37,50 +37,53 @@ Server runs on `http://localhost:8080` by default. Set `PORT` env var to change.
 
 ## Docker
 
-### Quick Start
+### Server Deployment
+
+Deploy to a Linux server:
 
 ```bash
-# Build and run with docker-compose
-# Linux/Mac:
+# 1. On server: create data directory
+ssh server "mkdir -p /opt/opencode-proxy/data"
+
+# 2. Copy auth.json to server
+scp ~/.local/share/opencode/auth.json server:/opt/opencode-proxy/data/
+
+# 3. Clone and run
+ssh server
+git clone https://github.com/AI-enthusiasts/opencode-openai-proxy.git
+cd opencode-openai-proxy
 docker compose up -d
 
-# Windows with WSL Docker:
-OPENCODE_DATA_DIR=/mnt/c/Users/$USER/.local/share/opencode docker compose up -d
-
-# Check health
+# 4. Verify
 curl http://localhost:8080/health
 ```
 
-### Prerequisites
+Data path: `/opt/opencode-proxy/data/auth.json` (bind mounted to container).
 
-OpenCode credentials must exist on the host machine:
+Custom port via `.env` or environment:
 ```bash
-# Login to providers (run on host, not in container)
-opencode auth login anthropic
-opencode auth login alibaba
-```
-
-Credentials are mounted from `~/.local/share/opencode/` as a read-only volume.
-
-### Configuration
-
-Environment variables:
-- `PORT` - Host port to expose (default: 8080)
-- `OPENCODE_DATA_DIR` - Path to OpenCode data directory (default: `~/.local/share/opencode`)
-
-```bash
-# Custom port
 PORT=3000 docker compose up -d
-
-# Custom credentials path
-OPENCODE_DATA_DIR=/path/to/opencode docker compose up -d
 ```
+
+### Local Development (Windows/WSL)
+
+For Windows with WSL Docker backend, use `docker-compose.override.yml` to fix path translation:
+
+```yaml
+# docker-compose.override.yml
+services:
+  proxy:
+    volumes:
+      - /mnt/c/Users/YOUR_USER/path/to/data:/data/opencode
+```
+
+This file is gitignored and overrides the server path for local development.
 
 ### Build Only
 
 ```bash
 docker build -t opencode-openai-proxy .
-docker run -p 8080:8080 -v ~/.local/share/opencode:/data/opencode -e OPENCODE_DATA_DIR=/data/opencode opencode-openai-proxy
+docker run -p 8080:8080 -v /opt/opencode-proxy/data:/data/opencode opencode-openai-proxy
 ```
 
 ## API
