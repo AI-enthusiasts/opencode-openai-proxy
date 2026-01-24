@@ -16,6 +16,7 @@
       },
       "devDependencies": {
         "@types/bun": "latest",
+        "openai": "^6.16.0",
         "typescript": "^5.7.0",
       },
       "peerDependencies": {
@@ -313,6 +314,8 @@
     "node-domexception": ["node-domexception@1.0.0", "", {}, "sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ=="],
 
     "node-fetch": ["node-fetch@3.3.2", "", { "dependencies": { "data-uri-to-buffer": "^4.0.0", "fetch-blob": "^3.1.4", "formdata-polyfill": "^4.0.10" } }, "sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA=="],
+
+    "openai": ["openai@6.16.0", "", { "peerDependencies": { "ws": "^8.18.0", "zod": "^3.25 || ^4.0" }, "optionalPeers": ["ws", "zod"], "bin": { "openai": "bin/cli" } }, "sha512-fZ1uBqjFUjXzbGc35fFtYKEOxd20kd9fDpFeqWtsOZWiubY8CZ1NAlXHW3iathaFvqmNtCWMIsosCuyeI7Joxg=="],
 
     "opencode-anthropic-auth": ["opencode-anthropic-auth@0.0.2", "", { "dependencies": { "@openauthjs/openauth": "^0.4.3" } }, "sha512-m8dcEKtq2ExGLV7n4BMr1H5UimDaABV6aG82IDMcp1xmXUaO1K20/hess0s8cwvv6MFmJk4//2wbWZkzoOtirA=="],
 

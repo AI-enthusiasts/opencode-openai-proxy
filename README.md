@@ -65,7 +65,7 @@ Health check endpoint.
 
 ### GET /v1/models
 
-Not implemented yet (returns 501).
+Lists available models from configured providers.
 
 ## Configuration
 
@@ -78,8 +78,11 @@ The proxy uses OpenCode's configuration:
 ## Development
 
 ```bash
-# Run tests
+# Run unit tests
 bun test
+
+# Run E2E tests (requires server running with credentials)
+bun run test:e2e
 
 # Run with watch mode
 bun run dev
@@ -87,7 +90,6 @@ bun run dev
 
 ## Limitations
 
-- `/v1/models` endpoint not implemented
 - Image inputs not fully tested
 
 ## Related
