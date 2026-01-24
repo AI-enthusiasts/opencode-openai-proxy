@@ -45,4 +45,56 @@ models.get("/", async (c) => {
   return c.json(response)
 })
 
+// GET /v1/models/:model - Retrieve a specific model
+models.get("/:model{.+}", async (c) => {
+  const modelId = c.req.param("model")
+  const runtime = getRuntime()
+  const providers = await runtime.listProviders()
+
+  // Parse provider/model from the ID
+  const slashIndex = modelId.indexOf("/")
+  if (slashIndex === -1) {
+    return c.json(
+      {
+        error: {
+          message: `The model '${modelId}' does not exist`,
+          type: "invalid_request_error",
+          param: "model",
+          code: "model_not_found",
+        },
+      },
+      404
+    )
+  }
+
+  const providerID = modelId.slice(0, slashIndex)
+  const modelName = modelId.slice(slashIndex + 1)
+
+  const provider = providers[providerID] as { info?: { models?: Record<string, unknown> } } | undefined
+  const modelInfo = provider?.info?.models?.[modelName]
+
+  if (!modelInfo) {
+    return c.json(
+      {
+        error: {
+          message: `The model '${modelId}' does not exist`,
+          type: "invalid_request_error",
+          param: "model",
+          code: "model_not_found",
+        },
+      },
+      404
+    )
+  }
+
+  const response: OpenAIModel = {
+    id: modelId,
+    object: "model",
+    created: Math.floor(Date.now() / 1000),
+    owned_by: providerID,
+  }
+
+  return c.json(response)
+})
+
 export { models }
