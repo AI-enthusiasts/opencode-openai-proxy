@@ -4,7 +4,7 @@ OpenAI-compatible API proxy that uses OpenCode's OAuth credentials. Allows any O
 
 ## Features
 
-- **OpenAI Chat Completions API** (`/v1/chat/completions`) - non-streaming
+- **OpenAI Chat Completions API** (`/v1/chat/completions`) - streaming and non-streaming
 - **Tool calling** support with proper conversion
 - **Multi-provider** - Anthropic, OpenAI, Google, Azure, Bedrock, Vertex, OpenRouter
 - **Automatic OAuth refresh** - uses `@tarquinen/opencode-auth-provider`
@@ -87,7 +87,6 @@ bun run dev
 
 ## Limitations
 
-- Streaming not implemented yet
 - `/v1/models` endpoint not implemented
 - Image inputs not fully tested
 
