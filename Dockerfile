@@ -2,9 +2,8 @@ FROM oven/bun:1
 
 WORKDIR /app
 
-# Copy package files and local dependencies first for better layer caching
+# Copy package files for better layer caching
 COPY package.json bun.lock ./
-COPY tarquinen-opencode-auth-provider-0.1.7.tgz ./
 
 # Install dependencies
 RUN bun install --frozen-lockfile

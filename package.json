@@ -19,7 +19,7 @@
     "@ai-sdk/google-vertex": "3.0.97",
     "@ai-sdk/openai": "2.0.89",
     "@ai-sdk/openai-compatible": "1.0.31",
-    "@tarquinen/opencode-auth-provider": "./tarquinen-opencode-auth-provider-0.1.7.tgz",
+    "@tarquinen/opencode-auth-provider": "0.1.7",
     "ai": "5.0.123",
     "hono": "4.11.5"
   },
