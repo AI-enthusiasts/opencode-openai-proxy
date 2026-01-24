@@ -8,12 +8,18 @@
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
     "test": "bun test",
-    "test:agent": "bun run tests/agent-loop.ts"
+    "test:agent": "bun run tests/agent-loop.ts",
+    "test:e2e": "bun run scripts/e2e-stream.ts"
   },
   "dependencies": {
-    "hono": "^4.7.0",
-    "@tarquinen/opencode-auth-provider": "^0.1.7",
-    "ai": "^5.0.98"
+    "@ai-sdk/anthropic": "^2.0.0-canary.19",
+    "@ai-sdk/google": "^2.0.0-canary.20",
+    "@ai-sdk/google-vertex": "^3.0.0-canary.20",
+    "@ai-sdk/openai": "^2.0.0-canary.20",
+    "@ai-sdk/openai-compatible": "^1.0.31",
+    "@tarquinen/opencode-auth-provider": "../opencode-auth-provider/tarquinen-opencode-auth-provider-0.1.7.tgz",
+    "ai": "^5.0.98",
+    "hono": "^4.7.0"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -21,5 +27,9 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "overrides": {
+    "@ai-sdk/provider": "2.0.1",
+    "@ai-sdk/provider-utils": "3.0.20"
   }
 }

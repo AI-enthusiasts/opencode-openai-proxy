@@ -1,4 +1,6 @@
 import { OpencodeAI } from "@tarquinen/opencode-auth-provider"
+import path from "path"
+import os from "os"
 
 type OpencodeAIInstance = {
   reset(): void
@@ -10,8 +12,26 @@ type OpencodeAIInstance = {
 
 let instance: OpencodeAIInstance | null = null
 
+/**
+ * Get the OpenCode data directory.
+ * Priority: OPENCODE_DATA_DIR > XDG_DATA_HOME/opencode > ~/.local/share/opencode
+ */
+export function getDataDir(): string {
+  if (process.env.OPENCODE_DATA_DIR) {
+    return process.env.OPENCODE_DATA_DIR
+  }
+  const xdgData = process.env.XDG_DATA_HOME || path.join(os.homedir(), ".local/share")
+  return path.join(xdgData, "opencode")
+}
+
 export function getRuntime(): OpencodeAIInstance {
   if (!instance) {
+    // Set XDG_DATA_HOME if OPENCODE_DATA_DIR is specified (for the auth-provider library)
+    if (process.env.OPENCODE_DATA_DIR) {
+      // The library expects XDG_DATA_HOME/opencode, so we set XDG_DATA_HOME to parent dir
+      const parentDir = path.dirname(process.env.OPENCODE_DATA_DIR)
+      process.env.XDG_DATA_HOME = parentDir
+    }
     instance = new OpencodeAI({ workspaceDir: process.cwd() }) as OpencodeAIInstance
   }
   return instance
