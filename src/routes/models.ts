@@ -23,9 +23,10 @@ models.get("/", async (c) => {
   const created = Math.floor(Date.now() / 1000)
 
   for (const [providerID, providerConfig] of Object.entries(providers)) {
-    const config = providerConfig as { models?: Record<string, unknown> }
-    if (config.models) {
-      for (const modelID of Object.keys(config.models)) {
+    const config = providerConfig as { info?: { models?: Record<string, unknown> } }
+    const models = config.info?.models
+    if (models) {
+      for (const modelID of Object.keys(models)) {
         modelList.push({
           id: `${providerID}/${modelID}`,
           object: "model",
