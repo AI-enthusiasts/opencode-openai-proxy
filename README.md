@@ -35,6 +35,54 @@ bun run dev
 
 Server runs on `http://localhost:8080` by default. Set `PORT` env var to change.
 
+## Docker
+
+### Quick Start
+
+```bash
+# Build and run with docker-compose
+# Linux/Mac:
+docker compose up -d
+
+# Windows with WSL Docker:
+OPENCODE_DATA_DIR=/mnt/c/Users/$USER/.local/share/opencode docker compose up -d
+
+# Check health
+curl http://localhost:8080/health
+```
+
+### Prerequisites
+
+OpenCode credentials must exist on the host machine:
+```bash
+# Login to providers (run on host, not in container)
+opencode auth login anthropic
+opencode auth login alibaba
+```
+
+Credentials are mounted from `~/.local/share/opencode/` as a read-only volume.
+
+### Configuration
+
+Environment variables:
+- `PORT` - Host port to expose (default: 8080)
+- `OPENCODE_DATA_DIR` - Path to OpenCode data directory (default: `~/.local/share/opencode`)
+
+```bash
+# Custom port
+PORT=3000 docker compose up -d
+
+# Custom credentials path
+OPENCODE_DATA_DIR=/path/to/opencode docker compose up -d
+```
+
+### Build Only
+
+```bash
+docker build -t opencode-openai-proxy .
+docker run -p 8080:8080 -v ~/.local/share/opencode:/data/opencode:ro -e OPENCODE_DATA_DIR=/data/opencode opencode-openai-proxy
+```
+
 ## API
 
 ### POST /v1/chat/completions

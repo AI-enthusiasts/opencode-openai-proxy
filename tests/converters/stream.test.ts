@@ -17,7 +17,7 @@ describe("convertStreamPart", () => {
   describe("text-delta", () => {
     it("converts text-delta with role on first chunk", () => {
       const state = createStreamState("test-model")
-      const chunk = convertStreamPart({ type: "text-delta", textDelta: "Hello" }, state)
+      const chunk = convertStreamPart({ type: "text-delta", text: "Hello" }, state)
       
       expect(chunk).not.toBeNull()
       expect(chunk!.object).toBe("chat.completion.chunk")
@@ -29,8 +29,8 @@ describe("convertStreamPart", () => {
 
     it("omits role on subsequent chunks", () => {
       const state = createStreamState("test-model")
-      convertStreamPart({ type: "text-delta", textDelta: "Hello" }, state)
-      const chunk = convertStreamPart({ type: "text-delta", textDelta: " world" }, state)
+      convertStreamPart({ type: "text-delta", text: "Hello" }, state)
+      const chunk = convertStreamPart({ type: "text-delta", text: " world" }, state)
       
       expect(chunk!.choices[0].delta.role).toBeUndefined()
       expect(chunk!.choices[0].delta.content).toBe(" world")
@@ -118,7 +118,7 @@ describe("convertStreamPart", () => {
         type: "tool-input-delta",
         toolCallId: "call_123",
         toolName: "get_weather",
-        argsTextDelta: '{"loc',
+        inputTextDelta: '{"loc',
       }, state)
       
       expect(chunk).not.toBeNull()
@@ -136,7 +136,7 @@ describe("convertStreamPart", () => {
         type: "tool-input-delta",
         toolCallId: "unknown_call",
         toolName: "get_weather",
-        argsTextDelta: '{"loc',
+        inputTextDelta: '{"loc',
       }, state)
       
       expect(chunk).toBeNull()
@@ -226,8 +226,8 @@ describe("convertStreamPart", () => {
     it("uses same id for all chunks in a stream", () => {
       const state = createStreamState("test-model")
       
-      const chunk1 = convertStreamPart({ type: "text-delta", textDelta: "a" }, state)
-      const chunk2 = convertStreamPart({ type: "text-delta", textDelta: "b" }, state)
+      const chunk1 = convertStreamPart({ type: "text-delta", text: "a" }, state)
+      const chunk2 = convertStreamPart({ type: "text-delta", text: "b" }, state)
       const chunk3 = convertStreamPart({ type: "finish", finishReason: "stop" }, state)
       
       expect(chunk1!.id).toBe(chunk2!.id)
@@ -237,7 +237,7 @@ describe("convertStreamPart", () => {
     it("uses same created timestamp for all chunks", () => {
       const state = createStreamState("test-model")
       
-      const chunk1 = convertStreamPart({ type: "text-delta", textDelta: "a" }, state)
+      const chunk1 = convertStreamPart({ type: "text-delta", text: "a" }, state)
       const chunk2 = convertStreamPart({ type: "finish", finishReason: "stop" }, state)
       
       expect(chunk1!.created).toBe(chunk2!.created)

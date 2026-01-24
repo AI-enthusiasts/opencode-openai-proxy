@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Beads (local artifacts)
+.beads/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+server.log
+
+# Test files (not needed in production)
+tests/
+scripts/
+
+# Documentation
+*.md
+!README.md
+
+# TypeScript build info
+*.tsbuildinfo

@@ -1,0 +1,17 @@
+services:
+  proxy:
+    build: .
+    ports:
+      - "${PORT:-8080}:8080"
+    volumes:
+      - ${OPENCODE_DATA_DIR:-~/.local/share/opencode}:/data/opencode:ro
+    environment:
+      - OPENCODE_DATA_DIR=/data/opencode
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
