@@ -39,26 +39,24 @@ Server runs on `http://localhost:8080` by default. Set `PORT` env var to change.
 
 ### Server Deployment
 
-Deploy to a Linux server:
+One-command deploy:
 
 ```bash
-# 1. On server: create data directory
-ssh server "mkdir -p /opt/opencode-proxy/data"
-
-# 2. Copy auth.json to server
-scp ~/.local/share/opencode/auth.json server:/opt/opencode-proxy/data/
-
-# 3. Clone and run
-ssh server
-git clone https://github.com/AI-enthusiasts/opencode-openai-proxy.git
-cd opencode-openai-proxy
-docker compose up -d
-
-# 4. Verify
-curl http://localhost:8080/health
+./scripts/deploy.sh user@server.com
 ```
 
-Data path: `/opt/opencode-proxy/data/auth.json` (bind mounted to container).
+The script:
+- Finds `auth.json` automatically (Linux/Mac/Windows)
+- Clones repo on first deploy, pulls updates on subsequent runs
+- Copies `auth.json` to server
+- Starts/restarts container with health check
+
+Options:
+```bash
+./scripts/deploy.sh user@server.com --no-auth  # Skip auth.json copy (already on server)
+```
+
+Data path on server: `/opt/opencode-proxy/data/auth.json`
 
 Custom port via `.env` or environment:
 ```bash
