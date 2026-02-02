@@ -2,10 +2,15 @@ import { OpencodeAI } from "@tarquinen/opencode-auth-provider"
 import path from "path"
 import os from "os"
 
+type ProviderInfo = {
+  source: string
+  options?: Record<string, unknown>
+}
+
 type OpencodeAIInstance = {
   reset(): void
   listProviders(): Promise<Record<string, unknown>>
-  getProvider(providerID: string): Promise<unknown>
+  getProvider(providerID: string): Promise<ProviderInfo | undefined>
   getModel(providerID: string, modelID: string): Promise<unknown>
   getLanguageModel(providerID: string, modelID: string): Promise<unknown>
 }
@@ -42,6 +47,18 @@ export function resetRuntime(): void {
     instance.reset()
     instance = null
   }
+}
+
+/**
+ * Check if a provider uses OAuth authentication.
+ * Anthropic OAuth requires a Claude Code system prompt prefix.
+ */
+export async function isOAuthProvider(providerID: string): Promise<boolean> {
+  const runtime = getRuntime()
+  const provider = await runtime.getProvider(providerID)
+  if (!provider?.options) return false
+  // OAuth providers have apiKey="" and a custom fetch function
+  return provider.options.apiKey === "" && typeof provider.options.fetch === "function"
 }
 
 export function parseModel(model: string): { providerID: string; modelID: string } {

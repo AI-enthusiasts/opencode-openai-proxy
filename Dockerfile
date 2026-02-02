@@ -3,6 +3,7 @@
 FROM oven/bun:1 AS builder
 WORKDIR /app
 COPY package.json bun.lock ./
+COPY tarquinen-opencode-auth-provider-0.1.7.tgz ./
 RUN bun install --frozen-lockfile
 COPY . .
 

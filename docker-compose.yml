@@ -6,7 +6,7 @@ services:
     volumes:
       - ${DATA_PATH:-./data}:/data/opencode
       - ${CONFIG_PATH:-./config}:/home/bun/.config/opencode:ro
-      - ${PLUGINS_PATH:-./plugins}:/home/bun/.opencode:ro
+      - ${PLUGINS_PATH:-./plugins}:/home/bun/.opencode
     environment:
       - NODE_ENV=production
       - PORT=${PORT:-8080}

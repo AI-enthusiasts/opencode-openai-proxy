@@ -2,10 +2,12 @@ import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 import { generateText, streamText, type LanguageModel } from "ai"
 import type { ChatCompletionRequest } from "../types"
-import { getRuntime, parseModel } from "../runtime"
+import { getRuntime, parseModel, isOAuthProvider } from "../runtime"
 import { convertMessages, convertTools } from "../converters/request"
 import { convertResponse } from "../converters/response"
 import { createStreamState, convertStreamPart, createErrorChunk } from "../converters/stream"
+
+const CLAUDE_CODE_SYSTEM_PREFIX = "You are Claude Code, Anthropic's official CLI for Claude."
 
 const completions = new Hono()
 
@@ -34,6 +36,10 @@ completions.post("/", async (c) => {
   const messages = convertMessages(body.messages, toolCallMap)
   const tools = convertTools(body.tools)
 
+  // Anthropic OAuth requires Claude Code system prompt prefix
+  const needsSystemPrefix = providerID === "anthropic" && await isOAuthProvider(providerID)
+  const system = needsSystemPrefix ? CLAUDE_CODE_SYSTEM_PREFIX : undefined
+
   // Streaming mode
   if (body.stream) {
     return streamSSE(c, async (stream) => {
@@ -42,6 +48,7 @@ completions.post("/", async (c) => {
       try {
         const result = streamText({
           model: languageModel,
+          system,
           messages,
           tools,
           temperature: body.temperature,
@@ -80,6 +87,7 @@ completions.post("/", async (c) => {
   // Non-streaming mode
   const result = await generateText({
     model: languageModel,
+    system,
     messages,
     tools,
     temperature: body.temperature,
