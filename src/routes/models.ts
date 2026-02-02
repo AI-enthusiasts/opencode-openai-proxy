@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { getRuntime } from "../runtime"
+import { getRuntime, resetRuntime } from "../runtime"
 
 interface OpenAIModel {
   id: string
@@ -15,9 +15,19 @@ interface OpenAIModelsResponse {
 
 const models = new Hono()
 
-models.get("/", async (c) => {
+async function listProvidersWithRetry(): Promise<Record<string, unknown>> {
   const runtime = getRuntime()
-  const providers = await runtime.listProviders()
+  try {
+    return await runtime.listProviders()
+  } catch {
+    resetRuntime()
+    const retryRuntime = getRuntime()
+    return await retryRuntime.listProviders()
+  }
+}
+
+models.get("/", async (c) => {
+  const providers = await listProvidersWithRetry()
 
   const modelList: OpenAIModel[] = []
   const created = Math.floor(Date.now() / 1000)

@@ -37,51 +37,30 @@ Server runs on `http://localhost:8080` by default. Set `PORT` env var to change.
 
 ## Docker
 
-### Server Deployment
-
-One-command deploy:
+### Local Docker
 
 ```bash
-./scripts/deploy.sh user@server.com
+cp .env.example .env
+# Edit .env — set paths to your OpenCode data:
+#   DATA_PATH=~/.local/share/opencode    (auth.json, rw)
+#   CONFIG_PATH=~/.config/opencode       (opencode.jsonc, ro)
+#   PLUGINS_PATH=~/.opencode             (plugin tokens, ro)
+docker compose up -d
 ```
 
-The script:
-- Finds `auth.json` automatically (Linux/Mac/Windows)
-- Clones repo on first deploy, pulls updates on subsequent runs
-- Copies `auth.json` to server
-- Starts/restarts container with health check
+Auth plugins are installed automatically at runtime (~12s on first start).
+The container uses `network_mode: host` and `restart: unless-stopped`.
 
-Options:
+### Coolify Deployment
+
+1. In Coolify: **Projects** → **New Project** → **Docker Compose**
+2. Paste contents of `coolify.yaml`
+3. Enable **"Connect to Predefined Network"**
+4. Deploy
+
+Copy `auth.json` to the volume:
 ```bash
-./scripts/deploy.sh user@server.com --no-auth  # Skip auth.json copy (already on server)
-```
-
-Data path on server: `/opt/opencode-proxy/data/auth.json`
-
-Custom port via `.env` or environment:
-```bash
-PORT=3000 docker compose up -d
-```
-
-### Local Development (Windows/WSL)
-
-For Windows with WSL Docker backend, use `docker-compose.override.yml` to fix path translation:
-
-```yaml
-# docker-compose.override.yml
-services:
-  proxy:
-    volumes:
-      - /mnt/c/Users/YOUR_USER/path/to/data:/data/opencode
-```
-
-This file is gitignored and overrides the server path for local development.
-
-### Build Only
-
-```bash
-docker build -t opencode-openai-proxy .
-docker run -p 8080:8080 -v /opt/opencode-proxy/data:/data/opencode opencode-openai-proxy
+docker cp ~/.local/share/opencode/auth.json opencode-proxy:/data/opencode/auth.json
 ```
 
 ## API

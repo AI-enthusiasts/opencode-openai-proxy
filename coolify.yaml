@@ -1,0 +1,35 @@
+# documentation: https://github.com/AI-enthusiasts/opencode-openai-proxy
+# slogan: OpenAI-compatible proxy for OpenCode OAuth credentials
+# tags: openai,proxy,opencode,ai,llm
+# logo: svgs/opencode.svg
+# port: 8080
+
+services:
+  proxy:
+    build: .
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+    volumes:
+      - opencode-data:/data/opencode
+    healthcheck:
+      test: ["CMD", "bun", "-e", "const res = await fetch('http://localhost:8080/health'); process.exit(res.ok ? 0 : 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  opencode-data:

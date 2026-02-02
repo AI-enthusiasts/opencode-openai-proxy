@@ -28,3 +28,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local data (contains secrets)
+data/
+plugins/
+config/

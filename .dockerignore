@@ -29,3 +29,6 @@ scripts/
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Local packages
+*.tgz
