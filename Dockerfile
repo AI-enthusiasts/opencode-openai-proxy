@@ -8,12 +8,18 @@ WORKDIR /plugin
 
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && rm -rf /var/lib/apt/lists/*
 
-# rmk40 fork adds 1M context auto-detection, multi-account rotation, backoff
+# rmk40 fork: multi-account rotation, backoff, usage tracking
+# 1M context patch: auto-detect & retry (from anomalyco PR #46)
 ARG ANTHROPIC_AUTH_REPO="https://github.com/rmk40/opencode-anthropic-auth.git"
 ARG ANTHROPIC_AUTH_BRANCH="rmk"
 
-RUN git clone --depth=1 --branch ${ANTHROPIC_AUTH_BRANCH} ${ANTHROPIC_AUTH_REPO} . \
-    && npm install --ignore-scripts \
+RUN git clone --depth=1 --branch ${ANTHROPIC_AUTH_BRANCH} ${ANTHROPIC_AUTH_REPO} .
+
+# Apply 1M context window patch (from anomalyco PR #46, adapted for rmk)
+COPY patches/add-1m-context.mjs /tmp/add-1m-context.mjs
+RUN node /tmp/add-1m-context.mjs ./index.mjs
+
+RUN npm install --ignore-scripts \
     && npm run build
 
 # ---------------------------------------------------------------------------
